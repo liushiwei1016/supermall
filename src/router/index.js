@@ -1,13 +1,38 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import home from '@/components/home'
+
 
 Vue.use(VueRouter)
 
+const home = ()=> import('views/home/home')
+const car = ()=> import('views/car/car')
+const categroy = ()=> import('views/categroy/categroy')
+const profile = ()=> import('views/profile/profile')
+
 const routes = [
   {
-    path:'/',
-    component:home
+    path:'',
+    redirect:'/home'
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: home
+  },
+  {
+    path: '/categroy',
+    name: 'categroy',
+    component: categroy
+  },
+  {
+    path: '/car',
+    name: 'car',
+    component: car
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: profile
   }
 ]
 

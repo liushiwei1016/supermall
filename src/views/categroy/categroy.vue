@@ -1,12 +1,10 @@
 <template>
-   <div>
-      <h1>Home</h1>
-   </div>
+   <h2>分类</h2>
 </template>
 
 <script>
   export default {
-    name: "home"
+    name: "categroy"
   }
 </script>
 
