@@ -1,7 +1,7 @@
 <template>
   <div class="bzlx">
-    <a href="">
-      <img src="~images/home/home1.png" alt="">
+    <a href="http://m.meilishuo.com/">
+      <img src="~images/home/recommend_bg.jpg" alt="">
     </a>
   </div>
 </template>

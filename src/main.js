@@ -6,12 +6,13 @@ import '@/assets/css/index.scss'
 import 'mint-ui/lib/style.css'
 import '@/assets/js/rem.js'
 
-import { Swipe, SwipeItem } from 'mint-ui'
+import {Swipe, SwipeItem} from 'mint-ui'
 
 Vue.component(Swipe.name, Swipe);
 Vue.component(SwipeItem.name, SwipeItem);
 
 Vue.config.productionTip = false;
+Vue.prototype.$bus = new Vue();
 
 new Vue({
   router,
