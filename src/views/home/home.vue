@@ -36,20 +36,18 @@
 </template>
 
 <script>
-  import NavBar from "../../components/common/navbar/navBar";
+  import NavBar from "components/common/navbar/navBar";
   import {getHomeMultidata, getHomeGoods} from "network/home";
-  import Recommdend from "./childComps/recommdend";
-  import Feature from "./childComps/feature";
-  import TabControl from "../../components/content/tabControl/tabControl";
-  import GoodsList from "../../components/content/goods/goodsList";
-  import Scroll from "../../components/common/scroll/scroll";
-  import BackTop from "../../components/content/backTop/backTop";
-  import {debounce} from "common/utils";
+  import Recommdend from "./childComponents/recommdend";
+  import Feature from "./childComponents/feature";
+  import TabControl from "components/content/tabControl/tabControl";
+  import GoodsList from "components/content/goods/goodsList";
+  import Scroll from "components/common/scroll/scroll";
+  import {itemListenerMixin, backTopMinin} from "common/mixin";
 
   export default {
     name: "home",
     components: {
-      BackTop,
       Scroll,
       GoodsList,
       TabControl,
@@ -68,13 +66,13 @@
           'sell': {page: 0, list: []}
         },
         currentType: 'pop',
-        showBtn: false,
         tabOffsetTop: 0,//TabControl距离顶部的距离
         isLoad: false,
         isTabFixed: false,
-        saveY: 0 //记录scroll组件滚动的值
+        saveY: 0, //记录scroll组件滚动的值
       }
     },
+
     computed: {
       showGoods() {
         return this.goods[this.currentType].list;
@@ -86,12 +84,13 @@
       this.getHomeGoodsdata('new');
       this.getHomeGoodsdata('sell')
     },
+
+
+    //使用混入
+    mixins: [itemListenerMixin, backTopMinin],
+
     mounted() {
-      //监听goodsListItem里面的图片加载完成
-      const refresh = debounce(this.$refs.scroll.refresh, 200);
-      this.$bus.$on('itemImageLoad', () => {
-        refresh()
-      });
+      // 已添加混入对象 itemListenerMixin
     },
     methods: {
       /**
@@ -130,21 +129,23 @@
             this.currentType = 'sell';
             break
         }
+        //让两个tabContent的选中选保持一致
         this.$refs.tabContent1.currentIndex = index;
         this.$refs.tabContent2.currentIndex = index;
       },
-      //点击返回顶部
-      backClick() {
-        this.$refs.scroll.scroll.scrollTo(0, 0, 500)
-      },
+      //点击返回顶部(这里已经在混入中添加)
+      // backClick() {
+      //   this.$refs.scroll.scroll.scrollTo(0, 0, 500)
+      // },
       //判断返回顶部按钮的显示与隐藏
       scrollTop(position) {
         //判断回顶按钮是否显示
-        this.showBtn = (-position.y) > 1000
+        this.isShowBtn(position);
 
         //判断tabControl是否吸顶(position: fixed;)
         this.isTabFixed = (-position.y) > this.tabOffsetTop
       },
+
       //上拉加载事件
       pullingUp() {
         //触发上拉加载事件，再次调用获取数据的方法
@@ -178,8 +179,10 @@
 
     },
     deactivated() {
-      // 离开的时候记录 scroll 滚动的高度
+      //1,离开的时候记录 scroll 滚动的高度
       this.saveY = this.$refs.scroll.scroll.y;
+      //2,取消全局事件的监听
+      this.$bus.$off('itemImageLoad', this.itemImgListener)
     }
 
   }

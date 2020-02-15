@@ -29,9 +29,10 @@
     },
     methods: {
       detailNavClick(index) {
-        this.currentIndex1 = index
+        this.currentIndex1 = index;
+        this.$emit('titleClick',index)
       },
-      prev () {
+      prev() {
         this.$router.back()
       }
     }
@@ -39,6 +40,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .navBar {
+    background-color: #fff;
+  }
+
   .middle {
     display: flex;
 
@@ -47,10 +52,12 @@
       width: 100%;
       height: 100%;
     }
-    .title{
+
+    .title {
       font-size: 14px;
     }
-    .activeTitle{
+
+    .activeTitle {
       color: $bgColor;
     }
   }
